@@ -37,8 +37,7 @@ def read_genome(genome_file):
     return chr_dic, chr_names, chr_full_names
 
 # Write Sequence Dictionary to Fasta
-def write_fasta(out_dir, nfile, seqdict, split = True):
-    file_path = os.path.dirname(out_dir)
+def write_fasta(file_path, nfile, seqdict, split = True):
     if not os.path.exists(file_path) and file_path:
         os.makedirs(file_path)
     
@@ -199,6 +198,8 @@ def convert_names(fasta, index, use_ucsc):
 
     out_dir = '/'.join(fasta.split('/')[:-1])
     file_name = fasta.split('/')[-1]
+
+    os.remove(fasta)
     write_fasta(out_dir, file_name, whole_genome)
 
 if __name__ == '__main__':
@@ -351,7 +352,7 @@ if __name__ == '__main__':
             nfile = prefix + '_genomic.fna.gz'
             nfile_ix = prefix + '_assembly_report.txt'
             cmd.append(['wget', site + '/' + nfile_ix, '-P', args.out_dir])
-        
+
         cmd[0] += [site + '/' + nfile, '-P', args.out_dir]
         try:
             for c in cmd:
